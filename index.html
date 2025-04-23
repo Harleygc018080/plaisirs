@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plaisirs | Pastry Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFFDD0',
+                        secondary: '#FFE4E1'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        .nav-link.active { color: #DAA520; }
+        .menu-item:hover .menu-overlay { opacity: 1; }
+        .gallery-item:hover img { transform: scale(1.05); }
+        body { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+        
+        /* Mobile menu transition */
+        .mobile-menu {
+            transition: all 0.3s ease;
+            transform: translateY(-100%);
+        }
+
+        .mobile-menu.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mobile-menu:not(.hidden) {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Input validation states */
+        .border-green-500 {
+            border-color: #10B981 !important;
+        }
+
+        .border-red-500 {
+            border-color: #EF4444 !important;
+        }
+
+        /* Alert animation */
+        .translate-x-full {
+            transform: translateX(100%);
+        }
+
+        .transition-all {
+            transition-property: all;
+        }
+
+        .duration-300 {
+            transition-duration: 300ms;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="./Logo_plaisirs.png" alt="Pastry Shop Logo" class="h-20 w-auto mb-4">
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#menu" class="nav-link">Menu</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                    
+                    <!-- Cart button in navbar -->
+                    <div class="relative ml-4">
+                        <button id="cart-button" class="text-[#DAA520] relative">
+                            <i class="ri-shopping-cart-line ri-2x"></i>
+                            <span id="cart-count" class="absolute -top-2 -right-2 bg-[#DAA520] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">0</span>
+                        </button>
+                        
+                        <!-- Cart dropdown -->
+                        <div id="cart-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl z-50 p-4">
+                            <h4 class="font-bold mb-4">Your Cart</h4>
+                            <div id="cart-items" class="space-y-2">
+                                <p class="text-gray-500 text-center py-4">Your cart is empty</p>
+                            </div>
+                            <div class="border-t mt-4 pt-4">
+                                <div class="flex justify-between font-bold mb-4">
+                                    <span>Total:</span>
+                                    <span id="cart-total">₱0</span>
+                                </div>
+                                <button class="bg-[#DAA520] text-white w-full py-2 rounded-button">Checkout</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button hover:bg-opacity-90 transition-all duration-300 whitespace-nowrap">Order Now</button>
+                </div>
+                
+                <button class="mobile-menu-button md:hidden text-[#DAA520]">
+                    <i class="ri-menu-line ri-2x"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile menu (hidden by default) -->
+    <div class="mobile-menu hidden md:hidden fixed inset-0 bg-white z-40 pt-24 px-6">
+        <div class="flex flex-col space-y-6">
+            <a href="#home" class="nav-link active text-xl">Home</a>
+            <a href="#menu" class="nav-link text-xl">Menu</a>
+            <a href="#about" class="nav-link text-xl">About</a>
+            <a href="#contact" class="nav-link text-xl">Contact</a>
+            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button hover:bg-opacity-90 transition-all duration-300 whitespace-nowrap w-full">Order Now</button>
+        </div>
+    </div>
+
+    <section id="home" class="relative min-h-screen flex items-center" style="background-image: url('https://public.readdy.ai/ai/img_res/a29a7c73fc0587d0a60439efbe4efd2a.jpg'); background-size: cover; background-position: center;">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-2xl">
+                <h1 class="text-6xl font-bold text-white mb-6">Artisanal Pastries Made with Love</h1>
+                <p class="text-xl text-white mb-8">Premium gourmet classic-modern cakes, pastries, artisan breads supplier to clients, companies, select cafés & caterers using premium imported & local ingredients.</p>
+                <button class="bg-[#DAA520] text-white px-8 py-3 !rounded-button hover:bg-opacity-90 transition-all duration-300 text-lg whitespace-nowrap">Explore Our Menu</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="py-20 bg-primary bg-opacity-10">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16">Our Signature Collection</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Menu items would go here (same as your original code) -->
+                <!-- I've removed them to keep this example shorter, but you should keep all your menu items -->
+                <!-- Each menu item should have the structure like this: -->
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Food for the Gods.jpg" alt="Food for the gods" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Food for the Gods</h3>
+                        <p class="text-gray-600 mb-4"><i>7x11</i></p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,400</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Brookies.jpg" alt="Brookies" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Brookies</h3>
+                        <p class="text-gray-600 mb-4"><i>7x11</i></p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,500</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Classique Brownies.jpg" alt="Brownies" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Classique Brownies</h3>
+                        <p class="text-gray-600 mb-4">w/ wallnuts <i>8x8</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,300</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Blondies.jpg" alt="Blondies" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Blondies</h3>
+                        <p class="text-gray-600 mb-4"><i>7x11</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">980</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Deep Dark Double Chocolate Chip.jpg" alt="Chocolate Chip" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Deep Dark Double Chocolate Chip Cookies</h3>
+                        <p class="text-gray-600 mb-4">1 Dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,300</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Deep Dark Double Chocolate Chip.jpg" alt="Chocolate Chip" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Classic Chocolate Chip Cookies</h3>
+                        <p class="text-gray-600 mb-4">1 Dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,200</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./NNNG6897.jpeg" alt="Macarons" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">French Macarons</h3>
+                        <p class="text-gray-600 mb-4">1 Dozen One Flavor
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">650</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./MCAP5463.jpeg" alt="Macarons" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">French Macarons</h3>
+                        <p class="text-gray-600 mb-4">1 Dozen 3 Flavors
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">850</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Nama.jpg" alt="Nama" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Nama</h3>
+                        <p class="text-gray-600 mb-4">1 Dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">950</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Truffle Noir.jpeg" alt="Truffle Noir" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Truffle Noir</h3>
+                        <p class="text-gray-600 mb-4">1 Dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">580</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Banana Chocolate Muffins.jpg" alt="Banana Muffins" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Banana Chocolate Muffins</h3>
+                        <p class="text-gray-600 mb-4">1 Dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">550</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Madeleine.jpeg" alt="Madeleine" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Madeleine</h3>
+                        <p class="text-gray-600 mb-4">1 Dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">650</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Butter Cake.jpeg" alt="Butter Cake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Butter Cake</h3>
+                        <p class="text-gray-600 mb-4"><i>9x11</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">800</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Lemon Poppyseed Pound Cake.jpg" alt="Lemon Poppyseed Pound Cake " class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Lemon Poppyseed Pound Cake </h3>
+                        <p class="text-gray-600 mb-4">1 Loaf
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">500</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Pistachio Pound II.jpeg" alt="Pistachio" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Pistachio Pound Cake</h3>
+                        <p class="text-gray-600 mb-4">1 Loaf
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">550</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Premium Banana.jpeg" alt="Premium Banana Bread" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Premium Banana Bread</h3>
+                        <p class="text-gray-600 mb-4">1 Loaf
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">250</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Baked Mango Cheesecake.jpeg" alt="Mango Cheese Cake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Baked Mango Cheesecake</h3>
+                        <p class="text-gray-600 mb-4">8"
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,500</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Caramel Cake.jpeg" alt="Caramel Cake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Caramel Cake</h3>
+                        <p class="text-gray-600 mb-4">9"
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,000</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Carrot Classique.jpeg" alt="Carrot Cake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Carrot Classique</h3>
+                        <p class="text-gray-600 mb-4">9"
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,600</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Pistachio Sansrival.jpg" alt="Pistachio Sansrival" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Pistachio Sansrival</h3>
+                        <p class="text-gray-600 mb-4">8"
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,700</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Lisbon Chocolate.jpeg" alt="Lisbon Chocolate Cake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Lisbon Chocolate Cake</h3>
+                        <p class="text-gray-600 mb-4">8"
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,850</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Foret Noire.jpeg" alt="Foret Noire" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Foret Noire</h3>
+                        <p class="text-gray-600 mb-4">8"
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">2,600</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Tres Leches.jpeg" alt="Tres Leches" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Tres Leches</h3>
+                        <p class="text-gray-600 mb-4"><i>8" / 7"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">2,100 / 1,200</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./L'opera.jpeg" alt="L opera Pavee" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> L'opera Pavee </h3>
+                        <p class="text-gray-600 mb-4"><i>9x4</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">2,500</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Louix.jpg" alt="Louis XV" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Louis XV</h3>
+                        <p class="text-gray-600 mb-4"><i>7"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,600</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Malagos Tablea II.jpg" alt=" Malagos Tablea Cake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Malagos Tablea Cake</h3>
+                        <p class="text-gray-600 mb-4"><i>9" / 7"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">2,500 / 1,300</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Sachertorte.jpeg" alt=" Sachertorte" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Sachertorte</h3>
+                        <p class="text-gray-600 mb-4"><i>7"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,300</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Samba III.jpeg" alt=" Samba (Dark Chocolate Ganache Cake)" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Samba (Dark Chocolate Ganache Cake)</h3>
+                        <p class="text-gray-600 mb-4"><i>8"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,450</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Mango Shortcake II.jpg" alt=" Mango Shortcake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Mango Shortcake</h3>
+                        <p class="text-gray-600 mb-4"><i>9" / 7"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,200 /  650</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Strawberry Shortcake.jpeg" alt=" Strawberry Shortcake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Strawberry Shortcake</h3>
+                        <p class="text-gray-600 mb-4"><i>9" / 7"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,800 / 950</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Valrhona Cookie Monster.jpg" alt=" Cookie Monster" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Cookie Monster</h3>
+                        <p class="text-gray-600 mb-4"><i>7"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,400</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Tiramisu II.jpeg" alt=" Tiramisu Entremet" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Tiramisu Entremet</h3>
+                        <p class="text-gray-600 mb-4"><i>8"</i>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,800</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Focaccia.jpeg" alt=" Focaccia" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Focaccia</h3>
+                        <p class="text-gray-600 mb-4">1 loaf
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">250</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Ciabatta.jpeg" alt=" Ciabatta" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Ciabatta</h3>
+                        <p class="text-gray-600 mb-4">2 pieces
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">200</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Pain au Levian.jpg" alt=" Sourdough" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2"> Sourdough</h3>
+                        <p class="text-gray-600 mb-4">1 boule/batard
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">225</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Honey Whole Wheat.jpg" alt="Honey Whole Wheat" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Honey Whole Wheat</h3>
+                        <p class="text-gray-600 mb-4">1 batard
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">300</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Kopi ROti II.jpg" alt="Kopi Roti" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Kopi Roti</h3>
+                        <p class="text-gray-600 mb-4">1 dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,700</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Cinnabuns II.jpeg" alt="Cinnabuns" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Cinnabuns</h3>
+                        <p class="text-gray-600 mb-4">1 dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,300</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Babka.jpeg" alt="Dark Chocolate Babka" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Dark Chocolate Babka</h3>
+                        <p class="text-gray-600 mb-4">1 loaf
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">350</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Mango Mint.jpg" alt="Mango-Mint Shortcake Cupcakes" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Mango-Mint Shortcake Cupcakes</h3>
+                        <p class="text-gray-600 mb-4">1 dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">600</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Sultan Cupcakes.jpg" alt="Sultan Beer Cupcakes" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Sultan Beer Cupcakes</h3>
+                        <p class="text-gray-600 mb-4">1 dozen w/ alcohol
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,400</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Rose cupcakes.jpg" alt="Rose & Lychee Cupcakes" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Rose & Lychee Cupcakes</h3>
+                        <p class="text-gray-600 mb-4">1 dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">640</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./strawberrycake.jpg" alt="Strawberry Cupcakes" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Strawberry Cupcakes</h3>
+                        <p class="text-gray-600 mb-4">1 dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">800</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Matcha Adzuki.jpg" alt="Matcha-Adzuki Cupcakes" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Matcha-Adzuki Cupcakes</h3>
+                        <p class="text-gray-600 mb-4">1 dozen
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">700</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Torta Sorrentina.jpeg" alt="Torta Sorrentina Bundt" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Torta Sorrentina Bundt</h3>
+                        <p class="text-gray-600 mb-4">Orange-Olive Oil Cake
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,200</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Baked Blueberry Cheesecake.jpeg" alt="Baked Bluberry Cheesecake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Baked Bluberry Cheesecake</h3>
+                        <p class="text-gray-600 mb-4"><i>7"
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">1,250</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="relative h-64">
+                        <img src="./Dark Chocolate Cheesecake.jpg" alt="Baked Choco Chesse Cake" class="w-full h-full object-cover">
+                        <div class="menu-overlay absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 flex items-center justify-center">
+                            <button class="bg-[#DAA520] text-white px-6 py-2 !rounded-button whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Baked Dark Chocolate Cheesecake</h3>
+                        <p class="text-gray-600 mb-4"><i>8"
+                        <div class="flex justify-between items-center">
+                            <span class="text-[#DAA520] font-bold">2,000</span>
+                            <div class="flex items-center space-x-2">
+                                <i class="ri-star-fill text-[#DAA520]"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+          
+        <section id="about" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-4xl font-bold mb-8">Our Story</h2>
+                        <p class="text-gray-600 mb-6">Founded in 2014, Plaisirs has been crafting exceptional pastries that combine traditional French techniques with modern innovation. Our master pastry chefs bring decades of experience and passion to create memorable desserts that delight both the eye and palate.</p>
+                        <p class="text-gray-600 mb-8">Every morning, our kitchen comes alive with the aroma of freshly baked goods, as we prepare everything from scratch using only the finest ingredients sourced from local and international suppliers.</p>
+                        <button class="bg-[#DAA520] text-white px-8 py-3 !rounded-button hover:bg-opacity-90 transition-all duration-300 whitespace-nowrap">Learn More</button>
+                    </div>
+                    <div class="relative h-[600px]">
+                        <img src="./chef andrea2.jpg" alt="Our Kitchen" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <section id="contact" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <div>
+                        <h2 class="text-4xl font-bold mb-8">Get in Touch</h2>
+                        <form class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Name</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#DAA520]">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Email</label>
+                                <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#DAA520]">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Message</label>
+                                <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#DAA520]"></textarea>
+                            </div>
+                            <button type="submit" class="bg-[#DAA520] text-white px-8 py-3 !rounded-button hover:bg-opacity-90 transition-all duration-300 whitespace-nowrap">Send Message</button>
+                        </form>
+                    </div>
+                    <div>
+                        <div class="h-[400px] rounded-lg overflow-hidden mb-8">
+                            <img src="map.png" alt="Location" class="w-full h-full object-cover">
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 flex items-center justify-center bg-[#DAA520] bg-opacity-10 rounded-full">
+                                    <i class="ri-map-pin-line text-[#DAA520]"></i>
+                                </div>
+                                <p class="text-gray-600">Iligan City, Philippines, 9200</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 flex items-center justify-center bg-[#DAA520] bg-opacity-10 rounded-full">
+                                    <i class="ri-phone-line text-[#DAA520]"></i>
+                                </div>
+                                <p class="text-gray-600">+63 991 400 3142</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 flex items-center justify-center bg-[#DAA520] bg-opacity-10 rounded-full">
+                                    <i class="ri-mail-line text-[#DAA520]"></i>
+                                </div>
+                                <p class="text-gray-600">plaisirs.gourmet@yahoo.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <img src="./Logo_plaisirs.png" alt="Pastry Shop Logo" class="h-20 w-auto mb-4">
+                        <p class="text-gray-400">Crafting moments of joy through exceptional pastries.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#home" class="text-gray-400 hover:text-white">Home</a></li>
+                            <li><a href="#menu" class="text-gray-400 hover:text-white">Menu</a></li>
+                            <li><a href="#about" class="text-gray-400 hover:text-white">About</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Opening Hours</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li>Monday - Saturday: 9:00 AM - 6:00 PM</li>
+                            <li>Closed every Sunday</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="https://www.facebook.com/plaisirschefdRe?rdid=M5Zbo4EAxCxwMNV8&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F15njk7xKdM%2F#" class="w-10 h-10 flex items-center justify-center bg-[#DAA520] bg-opacity-10 rounded-full hover:bg-opacity-20">
+                                <i class="ri-facebook-fill"></i>
+                            </a>
+                            <a href="https://www.instagram.com/plaisirs.gourmet?fbclid=IwY2xjawJDre5leHRuA2FlbQIxMAABHXLW9HIIz7MCpomhFlBm_bYM-V3uG6LbEFM-AqdqbUmDttsEDgX4TMlw0g_aem_e3pqUFcOJGwHqoWjmdXYnw" class="w-10 h-10 flex items-center justify-center bg-[#DAA520] bg-opacity-10 rounded-full hover:bg-opacity-20">
+                                <i class="ri-instagram-fill"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                    <p>&copy; 2025 Plaisirs. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // ========== NAVBAR FUNCTIONALITY ==========
+                const navbar = document.getElementById('navbar');
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('bg-white', 'shadow-md');
+                        navbar.classList.remove('bg-transparent');
+                    } else {
+                        navbar.classList.remove('bg-white', 'shadow-md');
+                        navbar.classList.add('bg-transparent');
+                    }
+                });
+    
+                // Active nav link highlighting
+                const navLinks = document.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        if(this.hash !== "") {
+                            e.preventDefault();
+                            const hash = this.hash;
+                            document.querySelector(hash).scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
+                        
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+    
+                // Mobile menu toggle
+                const mobileMenuButton = document.querySelector('.mobile-menu-button');
+                const mobileMenu = document.querySelector('.mobile-menu');
+                if(mobileMenuButton && mobileMenu) {
+                    mobileMenuButton.addEventListener('click', function() {
+                        mobileMenu.classList.toggle('hidden');
+                    });
+                }
+    
+                // ========== CART FUNCTIONALITY ==========
+                const cartButton = document.getElementById('cart-button');
+                const cartDropdown = document.getElementById('cart-dropdown');
+                const cartItems = document.getElementById('cart-items');
+                const cartCount = document.getElementById('cart-count');
+                const cartTotal = document.getElementById('cart-total');
+                let cart = [];
+    
+                // Toggle cart dropdown
+                cartButton.addEventListener('click', function() {
+                    cartDropdown.classList.toggle('hidden');
+                });
+    
+                // Close cart when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!cartButton.contains(e.target) && !cartDropdown.contains(e.target)) {
+                        cartDropdown.classList.add('hidden');
+                    }
+                });
+    
+                // Function to update cart display
+                function updateCartDisplay() {
+                    cartItems.innerHTML = '';
+                    
+                    if (cart.length === 0) {
+                        cartItems.innerHTML = '<p class="text-gray-500 text-center py-4">Your cart is empty</p>';
+                    } else {
+                        cart.forEach(item => {
+                            const cartItem = document.createElement('div');
+                            cartItem.className = 'flex justify-between items-center border-b pb-2';
+                            cartItem.innerHTML = `
+                                <div>
+                                    <h5 class="font-medium">${item.name}</h5>
+                                    <p class="text-sm text-gray-500">${item.price}</p>
+                                </div>
+                                <button class="remove-item text-red-500" data-id="${item.id}">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            `;
+                            cartItems.appendChild(cartItem);
+                        });
+                    }
+                    
+                    cartCount.textContent = cart.length;
+                    const total = cart.reduce((sum, item) => sum + parseFloat(item.price.replace(/[^0-9.]/g, '')), 0);
+                    cartTotal.textContent = `₱${total.toFixed(2)}`;
+                }
+    
+                // Add to cart buttons
+                const addToCartButtons = document.querySelectorAll('.menu-overlay button');
+                addToCartButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const menuItem = this.closest('.menu-item');
+                        const itemName = menuItem.querySelector('h3').textContent;
+                        const itemPrice = menuItem.querySelector('span').textContent;
+                        
+                        cart.push({
+                            id: Date.now(),
+                            name: itemName,
+                            price: itemPrice
+                        });
+                        
+                        updateCartDisplay();
+                        showAlert(`${itemName} added to cart!`, 'success');
+                    });
+                });
+    
+                // Remove item from cart
+                cartItems.addEventListener('click', function(e) {
+                    if (e.target.closest('.remove-item')) {
+                        const itemId = parseInt(e.target.closest('.remove-item').getAttribute('data-id'));
+                        cart = cart.filter(item => item.id !== itemId);
+                        updateCartDisplay();
+                        showAlert('Item removed from cart', 'success');
+                    }
+                });
+    
+                // ========== FORM FUNCTIONALITY ==========
+                const form = document.querySelector('form');
+                if(form) {
+                    const inputs = form.querySelectorAll('input, textarea');
+                    
+                    inputs.forEach(input => {
+                        input.addEventListener('input', function() {
+                            if(this.value.trim() !== '') {
+                                this.classList.remove('border-red-500');
+                                this.classList.add('border-green-500');
+                            } else {
+                                this.classList.remove('border-green-500');
+                            }
+                        });
+                    });
+                    
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        let isValid = true;
+                        
+                        inputs.forEach(input => {
+                            if(input.value.trim() === '') {
+                                input.classList.add('border-red-500');
+                                isValid = false;
+                            }
+                        });
+                        
+                        if(!isValid) {
+                            showAlert('Please fill in all required fields', 'error');
+                            return;
+                        }
+                        
+                        // Email validation
+                        const email = form.querySelector('input[type="email"]').value;
+                        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                            form.querySelector('input[type="email"]').classList.add('border-red-500');
+                            showAlert('Please enter a valid email address', 'error');
+                            return;
+                        }
+                        
+                        // Simulate form submission
+                        showAlert('Message sent successfully! We will contact you soon.', 'success');
+                        form.reset();
+                        
+                        // Reset input borders
+                        inputs.forEach(input => {
+                            input.classList.remove('border-green-500', 'border-red-500');
+                        });
+                    });
+                }
+    
+                // ========== HELPER FUNCTIONS ==========
+                function showAlert(message, type) {
+                    const alert = document.createElement('div');
+                    alert.className = `fixed top-4 right-4 px-6 py-3 rounded shadow-lg z-50 ${
+                        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                    } text-white transition-all duration-300 transform translate-x-0 opacity-100`;
+                    alert.textContent = message;
+                    document.body.appendChild(alert);
+    
+                    // Animate in
+                    setTimeout(() => {
+                        alert.classList.add('translate-x-full', 'opacity-0');
+                    }, 2500);
+    
+                    // Remove after animation
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 3000);
+                }
+            });
+        </script>
+    </body>
+    </html>
